@@ -40,7 +40,7 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 	R <- matrix(rho,ns,ns) #correlation matrix
 	for(i in 1:ns)R[i,i] <- 1
 	V <- diag(rep(episd,ns)) # diagonal matrix of sqrt(variances)
-	Sig <- V %*% R %*% V  #cov matrix
+	Sig <- V %*% R %*% V�#cov matrix
 	epi = rmvnorm(n=ny, sigma=Sig)
 
 	#Build time series of Spawners (S), abundance of returning spawners pre-harvest
@@ -59,12 +59,11 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 	N[7,3,]=R[7-(6),]*Preturn[3]
 	
 	# Loop through years of simulation	  
-	for(i in (7+1):ny){ 
+	for(i in (7+1):ny){
 		N[i,1,]=R[i-(4),]*Preturn[1]
 		N[i,2,]=R[i-(5),]*Preturn[2]
 		N[i,3,]=R[i-(6),]*Preturn[3]
 		N[i,4,]=R[i-(7),]*Preturn[4]
-		       
 		N[N[,,]=='NaN'] <- 0
 		Ntot[i,]=colSums(N[i,,])
 
@@ -83,8 +82,8 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 		R[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,]+phi*v[i-1,]+epi[i,])
 		predR[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,])
 		v[i,] = log(R[i,])-log(predR[i,])
-	    }
-	  
+}
+	 
 	#Output
 	S[S[,]=='NaN'] <- 0
 	Ntot[Ntot[,]=='NaN'] <- 0
