@@ -29,7 +29,7 @@ har.rate <- array(NA,dim=c(length(runs),2, length(alpha)+1))
 
 for(w in 1:length(alpha)){
 	for(iii in 1:length(runs)){
-		har.rate[iii,2,w] <- hcr(smsy[w],runs[iii],0,0)* MSY.add
+		har.rate[iii,2,w] <- hcr(smsy[w],runs[iii],0,0)
 		har.rate[iii,1,w] <- runs[iii]
 		}
 	}

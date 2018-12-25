@@ -72,7 +72,7 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 					master.har[which.min(abs(master.har[,1,length(alpha)+1]-sum(Ntot[i,]))),2,length(alpha)+1]*(1-control)
 					
 		outcome_error <- (1+rnorm(1,0,OU))
-		H[i,yy] =  Ntot[i,yy] * u *ifelse(outcome_error<0, 0, outcome_error) 			
+		H[i,yy] =  Ntot[i,yy] * u *ifelse(outcome_error<0, 0, outcome_error)*MSY.add 			
 			}
 		
 		S_exp = Ntot[i,]-H[i,] ; S_exp[S_exp<0] = 0
