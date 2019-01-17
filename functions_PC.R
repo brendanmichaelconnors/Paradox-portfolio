@@ -32,7 +32,7 @@ SC.eq <- function(U,a,b){
 # control <- degree of management control (1 is perfect stock specific Umsy, 0 is aggregate Umsy)
 # MSY.add <- degree of downward adjustment of Umsy (e.g., 1 is none, 0.5 is 50% reduction in realized harvest rate) 
 
-process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
+process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add,for.error){
 	ny = ny+20
 	ns = length(Ro) #number of sub-stocks
 
@@ -40,7 +40,7 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 	R <- matrix(rho,ns,ns) #correlation matrix
 	for(i in 1:ns)R[i,i] <- 1
 	V <- diag(rep(episd,ns)) # diagonal matrix of sqrt(variances)
-	Sig <- V %*% R %*% V #cov matrix
+	Sig <- V %*% R %*% V#cov matrix
 	epi = rmvnorm(n=ny, sigma=Sig)
 
 	#Build time series of Spawners (S), abundance of returning spawners pre-harvest
@@ -64,10 +64,11 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 		N[i,2,]=R[i-(5),]*Preturn[2]
 		N[i,3,]=R[i-(6),]*Preturn[3]
 		N[i,4,]=R[i-(7),]*Preturn[4]
-		N[N[,,]=='NaN'] <- 0
+		#N[N[,,]=='NaN'] <- 0
 		Ntot[i,]=colSums(N[i,,])
-
-		for (yy in 1:length(alpha)){
+		#Ntot[i,]=Ntot[i,]*rlnorm(1,0,for.error)
+	
+			for (yy in 1:length(alpha)){
 			u <- master.har[which.min(abs(master.har[,1,yy]-(Ntot[i,yy]))),2,yy]*control + 
 					master.har[which.min(abs(master.har[,1,length(alpha)+1]-sum(Ntot[i,]))),2,length(alpha)+1]*(1-control)
 					
@@ -82,6 +83,7 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add){
 		R[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,]+phi*v[i-1,]+epi[i,])
 		predR[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,])
 		v[i,] = log(R[i,])-log(predR[i,])
+		v[i,is.nan(v[i,])]<-0
 }
 	 
 	#Output
@@ -263,4 +265,109 @@ filled.legend <-
     }
     else key.axes
     box()
+}
+
+
+risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.tolerance, indexx, row){
+  
+  if(row == 1){ylim = 25}
+  if(row == 2){ylim = 10}
+  if(row == 3){ylim = 7}
+  
+  sims_out <- subset(long_sims, control == 0 & MSY == risk.tolerance)
+  x <- as.numeric(paste(sims_out[,1]))
+  y <- as.numeric(paste(sims_out[,2]))
+  z <-as.numeric(sims_out[,3]*100)
+  data.loess= loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  ext<-as.matrix(predict(data.loess, newdata = grid))
+  x <- as.numeric(paste(sims_out[,1]))+0.00000001
+  y <- as.numeric(paste(sims_out[,2]))+0.00000001
+  z <-as.numeric(1/sims_out[,4])
+  data.loess = loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  stability<-as.matrix(predict(data.loess, newdata = grid))
+  ext[ext<0]<-0
+  plot(stability[indexx,], ext[indexx,],col=colors[5],type="l",lwd=3,ylim=c(0, ylim),xlim=c(0.75,2.75),yaxt="n",xaxt="n",ylab="",xlab="")
+  
+  sims_out <- subset(long_sims, control == 0.12 & MSY == risk.tolerance)
+  x <- as.numeric(paste(sims_out[,1]))
+  y <- as.numeric(paste(sims_out[,2]))
+  z <-as.numeric(sims_out[,3]*100)
+  data.loess= loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  ext<-as.matrix(predict(data.loess, newdata = grid))
+  x <- as.numeric(paste(sims_out[,1]))+0.00000001
+  y <- as.numeric(paste(sims_out[,2]))+0.00000001
+  z <-as.numeric(1/sims_out[,4])
+  data.loess = loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  stability<-as.matrix(predict(data.loess, newdata = grid))
+  ext[ext<0]<-0
+  points(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3)
+  
+  sims_out <- subset(long_sims, control == 0.25 & MSY == risk.tolerance)
+  x <- as.numeric(paste(sims_out[,1]))
+  y <- as.numeric(paste(sims_out[,2]))
+  z <-as.numeric(sims_out[,3]*100)
+  data.loess= loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  ext<-as.matrix(predict(data.loess, newdata = grid))
+  x <- as.numeric(paste(sims_out[,1]))+0.00000001
+  y <- as.numeric(paste(sims_out[,2]))+0.00000001
+  z <-as.numeric(1/sims_out[,4])
+  data.loess = loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  stability<-as.matrix(predict(data.loess, newdata = grid))
+  ext[ext<0]<-0
+  points(stability[indexx,], ext[indexx,],col=colors[3],type="l",lwd=3)
+  
+  sims_out <- subset(long_sims, control == 0.5 & MSY == risk.tolerance)
+  x <- as.numeric(paste(sims_out[,1]))
+  y <- as.numeric(paste(sims_out[,2]))
+  z <-as.numeric(sims_out[,3]*100)
+  data.loess= loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  ext<-as.matrix(predict(data.loess, newdata = grid))
+  x <- as.numeric(paste(sims_out[,1]))+0.00000001
+  y <- as.numeric(paste(sims_out[,2]))+0.00000001
+  z <-as.numeric(1/sims_out[,4])
+  data.loess = loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  stability<-as.matrix(predict(data.loess, newdata = grid))
+  ext[ext<0]<-0
+  points(stability[indexx,], ext[indexx,],col=colors[2],type="l",lwd=3)
+  
+  sims_out <- subset(long_sims, control == 0.75 & MSY == risk.tolerance)
+  x <- as.numeric(paste(sims_out[,1]))
+  y <- as.numeric(paste(sims_out[,2]))
+  z <-as.numeric(sims_out[,3]*100)
+  data.loess= loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  ext<-as.matrix(predict(data.loess, newdata = grid))
+  x <- as.numeric(paste(sims_out[,1]))+0.00000001
+  y <- as.numeric(paste(sims_out[,2]))+0.00000001
+  z <-as.numeric(1/sims_out[,4])
+  data.loess = loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  stability<-as.matrix(predict(data.loess, newdata = grid))
+  ext[ext<0]<-0
+  points(stability[indexx,], ext[indexx,],col=colors[1],type="l",lwd=3)
+  
+  if(yaxis_plot=="TRUE"){
+    axis(2,las=2)  
+  }else{
+    axis(2,las=2,labels = F)  
+  }  
+  
+  if(xaxis_plot=="TRUE"){
+    axis(1)  
+  }else{
+    axis(1,labels = F)  
+  }   
+  
+  if(incl.legend == "TRUE"){
+    legend(1.5,24,c("0","0.125","0.25","0.5","0.75"),lwd=3,lty=1,col=c(colors[5],colors[4],colors[3],colors[2],colors[1]),cex=0.7, bty="n")
+    text(2,24,"Mgmt. control (C*)",cex=0.7)
+  }
 }
