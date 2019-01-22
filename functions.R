@@ -270,9 +270,9 @@ filled.legend <-
 
 risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.tolerance, indexx, row){
   
-  if(row == 1){ylim = 25}
+  if(row == 1){ylim = 20}
   if(row == 2){ylim = 10}
-  if(row == 3){ylim = 7}
+  if(row == 3){ylim = 6}
   
   sims_out <- subset(long_sims, control == 0 & MSY == risk.tolerance)
   x <- as.numeric(paste(sims_out[,1]))
@@ -367,7 +367,7 @@ risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.
   }   
   
   if(incl.legend == "TRUE"){
-    legend(1.5,24,c("0","0.125","0.25","0.5","0.75"),lwd=3,lty=1,col=c(colors[5],colors[4],colors[3],colors[2],colors[1]),cex=0.7, bty="n")
-    text(2,24,"Mgmt. control (C*)",cex=0.7)
+    legend(1.5,9,c("0","0.125","0.25","0.5","0.75"),lwd=3,lty=1,col=c(colors[5],colors[4],colors[3],colors[2],colors[1]),cex=0.9, bty="n")
+    text(2,9,"Mgmt. control (C*)",cex=0.9)
   }
 }

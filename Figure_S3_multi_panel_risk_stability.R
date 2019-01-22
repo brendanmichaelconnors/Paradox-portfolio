@@ -3,12 +3,12 @@ risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.
 #long_sims <- round(risk_sims, digits = 2)
 long_sims <- round(risk_sims , digits = 2)
 min_cor = 0
-jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan","#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
-colors <- jet.colors(5)
+colors <- viridis(5)
 
 
 
-jpeg("figures/fig_S3.100_0.8_0.6_0.1_0.jpeg",width=8, height=8, units="in",res=800)
+
+jpeg("figures/fig_S3.phi_0.8.Rho_0.6.logFE_0.1.OU_0.Jan212019.jpeg",width=8, height=7, units="in",res=800)
 #dev.new(width=8, height=10,new=FALSE)
 
 # Set up plotting region
@@ -35,7 +35,7 @@ split.screen(m)
 
 screen(1)
   par(mar = c(1,1.5,1,1))
-  risk_stab_plot(long_sims, "TRUE", "TRUE", "FALSE", 1, 20, 1)
+  risk_stab_plot(long_sims, "FALSE", "TRUE", "FALSE", 1, 20, 1)
   mtext("Var. in productivity = low",3,line=0, cex=0.9)
   
 screen(2)
@@ -51,7 +51,7 @@ screen(3)
   
 screen(4)
   par(mar = c(1,1.5,1,1))
-  risk_stab_plot(long_sims, "FALSE", "TRUE", "FALSE", 0.75, 20, 2)
+  risk_stab_plot(long_sims, "TRUE", "TRUE", "FALSE", 0.75, 20, 2)
   mtext("Risk (% stocks extirpated)",2,line=2)
   
 screen(5)

@@ -1,7 +1,7 @@
 ## Load functions and libraries for analysis
 
 
-source("functions_PC.R") 
+source("functions.R") 
 
 library(MASS)
 library(reshape)
@@ -14,3 +14,4 @@ library(dichromat)
 library(ggplot2)
 library(gridExtra)
 library(ggpubr)
+library(viridis)

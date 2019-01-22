@@ -1,9 +1,8 @@
 indexx<- 90 # set index (or "slice"); columns are synchrony and rows are heterogenity in productivity
-jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan","#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
-colors <- jet.colors(5)
+colors <- viridis(5)
 risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.Dec282018")
 
-jpeg("figures/fig_2_control_risk_phi_0.8.Rho_0.6.logFE_0.0.OU_0.Dec242018.jpeg",width=6.5, height=3.25, units="in",res=800)
+jpeg("figures/fig_2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.Jan212019.jpeg",width=6.5, height=3.25, units="in",res=800)
 #dev.new(width=8, height=4,new=FALSE)
 par(mfrow=c(1,2),bty="o", mar=c(2,2,2,2),oma=c(3,2,0,0))#set dimensions to plots
 

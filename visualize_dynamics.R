@@ -17,10 +17,8 @@ Preturn <- c(0,0,1,0)
 for.error <- 0.1
 OU <- 0
 
-
 control <- 0 
 MSY.add <- 1
-
 
 source("MSY_hcr_function.R")				
 out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)

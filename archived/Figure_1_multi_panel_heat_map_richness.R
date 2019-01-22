@@ -3,8 +3,7 @@ mean_out <-readRDS(file = "output/richness_sync_200_0.8_0.6_0010_0.15_0_heteroP2
 max.catch_hetP_2 <- c(max(mean_out[1,,2]),max(mean_out[2,,2]),max(mean_out[3,,2]),max(mean_out[4,,2]),max(mean_out[5,,2]),max(mean_out[6,,2]),max(mean_out[7,,2]),max(mean_out[8,,2]),max(mean_out[9,,2]),max(mean_out[10,,2]))
 max.catch <- cbind(max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2)
 min_cor=0
-
-jpeg("figures/fig_1_phi_0.8.Rho_0.6.logFE_0.15.OU_0.hetP2.Jan212018.jpeg",width=6, height=5.15, units="in",res=800)
+jpeg("figures/fig_1_heat_map_phi_0.8.Rho_0.6.logFE_0.15.OU_0.hetP2.jpeg",width=6, height=5.15, units="in",res=800)
 #dev.new(width=6, height=5,new=FALSE)
 par(mfrow=c(2,2),bty="o", mar=c(3,3,2.5,5),oma=c(2,2,1,1))#set dimensions to plots
 long.data <- as.data.frame(as.table((mean_out[,,2]/max.catch)*100))

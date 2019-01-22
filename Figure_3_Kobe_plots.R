@@ -152,12 +152,17 @@ btmr <- rbind(full.sims.top[which(full.sims.top$control=="0.85"),],full.sims.bot
 ##########################################
 #Summary stats
 
+XX <- "0"
+data <- full.sims.top[which(full.sims.top$control==XX),]
+Overfished <- subset(data,F_Fmsy >1.1 & S_Smsy < 0.91)
+dim(Overfished)[1]/dim(data)[1]  
 
-Overfished <- subset(full.sims.top[which(full.sims.top$control=="0"),],S_Smsy >1 & F_Fmsy <0.90)
-dim(Overfished)[1]/dim(HH)[1]  
+Overfished <- subset(full.sims.top[which(full.sims.top$control=="0"),],S_Smsy <1 )
+dim(Overfished)[1]/dim(full.sims.top)[1]  
+
 
 Overfished <- subset(full.sims.top[which(full.sims.top$control=="0.85"),],S_Smsy >1 & F_Fmsy <0.90)
-dim(Overfished)[1]/dim(HH)[1] 
+dim(Overfished)[1]/dim(full.sims.top)[1] 
 
 ##########################################
 #Plot
@@ -244,7 +249,7 @@ p8 <- ggplot() +
   geom_vline(xintercept=1)+ 
   scale_y_reverse()
 
-#jpeg("figures/fig_2_kobe_10sims_0.6_0.8_0010.jpeg",width=6, height=6, units="in",res=800)
+jpeg("figures/fig_3_kobe_10sims_phi_0.8.Rho_0.6.logFE_0.1.OU_0.Jan212019.jpeg",width=6, height=6, units="in",res=800)
 ggarrange(p1,p2,p3,p4,p5,p6,p7,p8, labels = c("A", "B", "C", "D", "E", "F", "G", "H"))
 
 dev.off()

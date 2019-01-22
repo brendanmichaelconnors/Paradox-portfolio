@@ -16,7 +16,7 @@ min_cor<-0
 
 
 
-jpeg("figures/fig_S2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.Jan212019.jpeg",width=8, height=7, units="in",res=800)
+jpeg("figures/fig_S2_200_0.8_0.6_0010_0.15_0.jpeg",width=8, height=7.5, units="in",res=800)
 #dev.new(width=8, height=10,new=FALSE)
 
 # Set up plotting region
@@ -53,7 +53,7 @@ screen(1)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(viridis(100)), zlim=c(60,100))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(tim.colors()), zlim=c(60,100))
   axis(2,las=2,cex.axis=0.9)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9,labels = F)
   mtext("Var. in productivity = low",3,line=0, cex=0.9)
@@ -70,7 +70,7 @@ screen(2)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(viridis(100)), zlim=c(60,100))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(tim.colors()), zlim=c(60,100))
   axis(2,las=2,cex.axis=0.9,labels = F)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9,labels = F)
   mtext("Var. in productivity = medium",3,line=0, cex=0.9)
@@ -92,7 +92,7 @@ screen(3)
   mtext("Var. in productivity = high",3,line=0, cex=0.9)
   axis(2,las=2,cex.axis=0.9,labels = F)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9,labels = F)
-  image.plot(xx,yy,zz,axes=F,add=T,legend.mar=3,col = rev(viridis(100)), zlim=c(60,100))
+  image.plot(xx,yy,zz,axes=F,add=T,legend.mar=3,col = rev(tim.colors()), zlim=c(60,100))
   
 # ROW 2: Stability
 
@@ -108,7 +108,7 @@ screen(4)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(viridis(100)),zlim=c(0.75,2.6))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(tim.colors()),zlim=c(0.75,2.6))
   mtext("Synchrony",2,line=2.5)
   axis(2,las=2,cex.axis=0.9)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9,labels = F)
@@ -125,7 +125,7 @@ screen(5)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(viridis(100)),zlim=c(0.75,2.6))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = rev(tim.colors()),zlim=c(0.75,2.6))
   axis(2,las=2,cex.axis=0.9,labels = F)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9,labels = F)
 
@@ -141,11 +141,11 @@ screen(6)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = viridis(100))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = tim.colors())
   mtext("Catch stability (1/CV)",4,line=4)
   axis(2,las=2,cex.axis=0.9,labels = F)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9,labels = F)
-  image.plot(xx,yy,zz,axes=F,add=T,legend.mar=3,col = rev(viridis(100)),zlim=c(0.75,2.6))
+  image.plot(xx,yy,zz,axes=F,add=T,legend.mar=3,col = rev(tim.colors()),zlim=c(0.75,2.6))
 
 # ROW 3: Risk
 screen(7)
@@ -161,7 +161,7 @@ screen(7)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = viridis(100), zlim=c(0,25))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = tim.colors(), zlim=c(0,25))
   axis(2,las=2,cex.axis=0.9)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9)
 
@@ -178,7 +178,7 @@ screen(8)
   xx<-seq(6,31,length.out=100)
   yy<-seq(min_cor,1,length.out=100)
   
-  image(xx,yy,zz,axes=F,ylab="",xlab="",col = viridis(100), zlim=c(0,25))
+  image(xx,yy,zz,axes=F,ylab="",xlab="",col = tim.colors(), zlim=c(0,25))
   axis(2,las=2,cex.axis=0.9,labels = F)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9)
   mtext("Richness (no. of populations)",1,line=2.5)
@@ -201,7 +201,7 @@ screen(9)
   axis(2,las=2,cex.axis=0.9,labels = F)
   axis(1,at=c(6,11,16,21,26,31),cex.axis=0.9)
   
-  image.plot(xx,yy,zz,axes=F,add=T,legend.mar=3,col = viridis(100), zlim=c(0,25))
+  image.plot(xx,yy,zz,axes=F,add=T,legend.mar=3,col = tim.colors(), zlim=c(0,25))
  
    close.screen(all.screens = TRUE)
   

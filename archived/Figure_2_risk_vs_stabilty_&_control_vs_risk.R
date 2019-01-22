@@ -1,10 +1,9 @@
 indexx<- 90 # set index (or "slice"); columns are synchrony and rows are heterogenity in productivity
 jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan","#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
 colors <- jet.colors(5)
-min_cor <- 0
-risk_sims <-readRDS(file = "output/mgmt_risk_sims.phi_0.8.Rho_0.6.logFE_0.OU_0.Dec282018")
+risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.Dec282018")
 
-jpeg("figures/fig_2_0.8_0.6_0_0.Dec282018.jpeg",width=6.5, height=3.25, units="in",res=800)
+jpeg("figures/fig_2_control_risk_phi_0.8.Rho_0.6.logFE_0.0.OU_0.Dec242018.jpeg",width=6.5, height=3.25, units="in",res=800)
 #dev.new(width=8, height=4,new=FALSE)
 par(mfrow=c(1,2),bty="o", mar=c(2,2,2,2),oma=c(3,2,0,0))#set dimensions to plots
 
@@ -17,6 +16,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
@@ -36,6 +36,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
@@ -55,6 +56,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
@@ -88,6 +90,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
@@ -112,6 +115,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
@@ -132,6 +136,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
@@ -149,6 +154,7 @@ z <-as.numeric(sims_out[,3]*100)
 data.loess= loess(z~x*y)
 grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
 ext<-as.matrix(predict(data.loess, newdata = grid))
+ext[ext<0]<-0
 
 x <- as.numeric(paste(sims_out[,1]))+0.00000001
 y <- as.numeric(paste(sims_out[,2]))+0.00000001
