@@ -17,13 +17,13 @@ Uopt <- round(0.5* log(alpha)-0.07* log(alpha)^2,digits=2)
 
 ny = 50
 phi <- 0.4
-rho <- 0.6
-episd <- 0.6
+rho <- 0.4
+episd <- 0.4
 Preturn <- c(0,0,1,0)
 for.error <- 0.1
 OU <- 0
 
-num.sims <- 10
+num.sims <- 5
 
 time_period <- c(48:51)
 
@@ -167,25 +167,29 @@ dim(Overfished)[1]/dim(full.sims.top)[1]
 ##########################################
 #Plot
 
-p1 <- ggplot(data = full.sims.top[which(full.sims.top$control=="0"),] ,aes(S_Smsy, F_Fmsy))+
+p1 <- ggplot(data = full.sims.top[which(full.sims.top$control=="0"),],aes(S_Smsy, F_Fmsy))+
+  stat_density_2d(aes(x= S_Smsy, y=F_Fmsy, fill = stat(level)), geom = "polygon") +
+  scale_fill_distiller(palette="Blues", direction=1) +
   scale_x_continuous(name=bquote(" S/"* S[MSY]),limits = c(0,4),position = "top")+
-  scale_y_continuous(name=bquote(" F/ "* F[MSY]),limits = c(0,4))+
+  scale_y_continuous(name=bquote(" F/ "* F[MSY]),limits = c(0,3))+
   geom_vline(xintercept=1)+
   geom_hline(yintercept=1)+
   theme_bw()+
-  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(0,0.2,0.2,0), "lines"))+
-  geom_point(color="blue",fill='blue',size=2,alpha=0.65,shape=16)+
-  annotate("text", x=2.5, y=4,   label= "Mgmt. control = Low",size=2.5) + 
-  annotate("text", x=2.5, y=3.65, label= "Risk tolerance = High",size=2.5)  
+  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(0,0.2,0.2,0), "lines"), legend.position="none")+
+  geom_point(aes(S_Smsy, F_Fmsy),color='blue',fill='blue',size=2,alpha=0.65,shape=16)+
+  annotate("text", x=2.5, y=3,   label= "Mgmt. control = Low",size=2.5) + 
+  annotate("text", x=2.5, y=2.65, label= "Risk tolerance = High",size=2.5)  
   
 
 p2 <- ggplot(data = full.sims.top[which(full.sims.top$control=="0.85"),],aes(S_Smsy, F_Fmsy))+
+  stat_density_2d(aes(x= S_Smsy, y=F_Fmsy, fill = stat(level)), geom = "polygon") +
+  scale_fill_distiller(palette="Greens", direction=1) +
   scale_x_continuous(name=bquote(" S/"* S[MSY]),limits = c(0,4),position = "top")+
   scale_y_continuous("",limits = c(0,4),labels = NULL)+
   geom_vline(xintercept=1)+
   geom_hline(yintercept=1)+
   theme_bw()+
-  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(0,0.2,0.2,0), "lines"))+
+  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(0,0.2,0.2,0), "lines"), legend.position="none")+
   geom_point(color='green',fill='green',size=2,alpha=0.45,shape=16)+
   annotate("text", x=2.5, y=4,   label= "Mgmt. control = High",size=2.5) + 
   annotate("text", x=2.5, y=3.65, label= "Risk tolerance = High",size=2.5)  
@@ -199,24 +203,28 @@ p3 <- ggplot() +
   theme(legend.position="none",plot.margin = unit(c(2,4,0,0), "lines"))+
   geom_vline(xintercept=1)
 
-p4 <- ggplot(data = full.sims.bottom[which(full.sims.bottom$control=="0"),],aes(S_Smsy, F_Fmsy))+
+p4 <- ggplot(data = full.sims.bottom[which(full.sims.bottom$control=="0"),aes(S_Smsy, F_Fmsy)])+
+  stat_density_2d(aes(x= S_Smsy, y=F_Fmsy, fill = stat(level)), geom = "polygon") +
+  scale_fill_distiller(palette="Reds", direction=1) +
   scale_x_continuous("",limits = c(0,4),labels = NULL)+
   scale_y_continuous(name=bquote(" F/ "* F[MSY]),limits = c(0,4))+
   geom_vline(xintercept=1)+
   geom_hline(yintercept=1)+
   theme_bw()+
-  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(1,0.2,0,0), "lines"))+
+  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(1,0.2,0,0), "lines"), legend.position="none")+
   geom_point(color='red',fill='red',size=2,alpha=0.65,shape=16) +
   annotate("text", x=2.5, y=4,   label= "Mgmt. control = Low",size=2.5) + 
   annotate("text", x=2.5, y=3.65, label= "Risk tolerance = Low",size=2.5) 
 
 p5 <- ggplot( data = full.sims.bottom[which(full.sims.bottom$control=="0.85"),],aes(S_Smsy, F_Fmsy))+
+  stat_density_2d(aes(x= S_Smsy, y=F_Fmsy, fill = stat(level)), geom = "polygon") +
+  scale_fill_distiller(palette="Greys", direction=1) +
   scale_x_continuous("",limits = c(0,4),labels = NULL)+
   scale_y_continuous("",limits = c(0,4),labels = NULL)+
   geom_vline(xintercept=1)+
   geom_hline(yintercept=1)+
   theme_bw()+
-  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(1,0.2,0,0), "lines"))+
+  theme(panel.background = element_blank(),panel.grid = element_blank(),plot.margin = unit(c(1,0.2,0,0), "lines"), legend.position="none")+
   geom_point(color='black',fill='black',size=2,alpha=0.65,shape=16) +
   annotate("text", x=2.5, y=4,   label= "Mgmt. control = High",size=2.5) + 
   annotate("text", x=2.5, y=3.65, label= "Risk tolerance = Low",size=2.5) 
