@@ -120,31 +120,35 @@ process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add,for.error)
 # steps <- # of steps between high and low heterogenity
 # equ_spw <- equilibrium abundance (assumes all pops are the same size)
 # var_pop <- maintain eveness in variation in productivity across populations? ("Yes" or "No")
+# fixed_size <- Should total size remain the same regardless of richness? ("Yes" or "No") if yes then it is equal to equ_spw
 
-hetero_prod_func = function(pops, max.a, min.a, steps, equ_spw,var_pop){
-	alpha.all <- array(NA,dim=c(steps,pops))
-	alpha.all[1,] <- rep(mean(c(max.a, min.a),pops))
-	alpha.all[steps,1] <- min.a
-	alpha.all[steps, pops] <- max.a
-	
-	for(i in 2:pops){
-		alpha.all[steps,i] <- alpha.all[steps,i-1] + (max.a-min.a)/(pops-2)
-		for(ii in 2:(steps)){
-			alpha.all[ii,i-1] <- alpha.all[ii-1,i-1] - (alpha.all[1,i-1] - alpha.all[steps,i-1])/(steps-2)
-			alpha.all[ii, pops] <- alpha.all[ii-1, pops] - (alpha.all[1, pops] - alpha.all[steps, pops])/(steps-2)
-			}
-		}
+hetero_prod_func = function(pops, max.a, min.a, steps, equ_spw,var_pop,fixed_size){
+  if(fixed_size == "Yes"){equ_spw = equ_spw/pops}
+  
+  alpha.all <- array(NA,dim=c(steps,pops))
+  alpha.all[1,] <- rep(mean(c(max.a, min.a),pops))
+  alpha.all[steps,1] <- min.a
+  alpha.all[steps, pops] <- max.a
+  
+  for(i in 2:pops){
+    alpha.all[steps,i] <- alpha.all[steps,i-1] + (max.a-min.a)/(pops-2)
+    for(ii in 2:(steps)){
+      alpha.all[ii,i-1] <- alpha.all[ii-1,i-1] - (alpha.all[1,i-1] - alpha.all[steps,i-1])/(steps-2)
+      alpha.all[ii, pops] <- alpha.all[ii-1, pops] - (alpha.all[1, pops] - alpha.all[steps, pops])/(steps-2)
+    }
+  }
+  
+  if(var_pop == "Yes"){
+    alpha.all[,1:(pops/3)] <- alpha.all[,1]
+    alpha.all[,((pops/3)+1):((pops/3)+pops/3)] <- alpha.all[,(pops/2)+0.5]
+    alpha.all[,((pops)-(pops/3)+1):pops]  <- alpha.all[,pops]
+  }	
+  
+  beta.all <- array(NA,dim=c(steps,pops))
+  beta.all <- log(alpha.all)/equ_spw
+  list(alphas = alpha.all,betas = beta.all)
+}
 
-		if(var_pop == "Yes"){
-			alpha.all[,1:(pops/3)] <- alpha.all[,1]
-			alpha.all[,((pops/3)+1):((pops/3)+pops/3)] <- alpha.all[,(pops/2)+0.5]
-			alpha.all[,((pops)-(pops/3)+1):pops]  <- alpha.all[,pops]
-		}	
-
-	beta.all <- array(NA,dim=c(steps,pops))
-	beta.all <- log(alpha.all)/equ_spw
-	list(alphas = alpha.all,betas = beta.all)
-	}
 
 #------------------------------------------------------------------------------#
 # Filled contour function by Ian Taylor, Carey McGilliard and Bridget Ferris
