@@ -1,8 +1,19 @@
+########################################################################################
+# Fig2_riskXstab_mgmtXrisk.R
+#
+# Figure 2: Fishery and conservation consequences of stock diversity
+# Last updated: July 5, 2019
+# Author: B. Connors (DFO)
+#        
+########################################################################################
+
+# --- Load simulation output -----------------------------------------------------------
+
 indexx<- 90 # set index (or "slice"); columns are synchrony and rows are heterogenity in productivity
 colors <- viridis(5)
-risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.Dec282018")
+risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.09July2019")
 
-jpeg("figures/fig_2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.Jan212019.jpeg",width=6.5, height=3.25, units="in",res=800)
+jpeg("figures/fig_2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.09July2019.jpeg",width=6.5, height=3.25, units="in",res=800)
 #dev.new(width=8, height=4,new=FALSE)
 par(mfrow=c(1,2),bty="o", mar=c(2,2,2,2),oma=c(3,2,0,0))#set dimensions to plots
 

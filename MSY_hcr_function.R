@@ -1,7 +1,16 @@
-#------------------------------------------------------------------------------#
-# MSY based harvest control rule function and code to generate array of harvest 
-#	control rules under varying degrees of control
-#------------------------------------------------------------------------------#	
+######################################################################
+# MSY_hcr_function.R
+# MSY based harvest control rule function and code to generate array 
+#   of harvest control rules under varying degrees of control. 
+#
+# This is pretty janky but does the trick, for now
+#
+# Last updated: July 4, 2019
+# Authors: Brendan Connors (DFO)
+#
+######################################################################
+ 
+#------------ Function -----------------------------------------------
 
 hcr = function(egfloor, run,for.error,OU){
 	run.est <- run * (rlnorm(1,0,for.error)); if(is.na(run.est)==TRUE){run.est <- run}
@@ -11,6 +20,8 @@ hcr = function(egfloor, run,for.error,OU){
 	if(hr >1 ){hr=1}
 	return(hr)
 	}
+
+#------------ Object with single and mixed stock harvest rates -------
 
 smsy <- (1-lambert_W0(exp(1-log(alpha))))/beta
 

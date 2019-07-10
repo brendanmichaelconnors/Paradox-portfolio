@@ -1,4 +1,12 @@
-## Functions for analysis
+######################################################################
+# functions.R
+# Functions for xixed-stock fishery simulaitons  
+#
+# Last updated: July 4, 2019
+# Authors: Brendan Connors (DFO), plus others for filled.contour()
+#
+######################################################################
+
 
 #------------------------------------------------------------------------------#
 # Status function; estimates equilibrium spwn abundance and catch plus whether 

@@ -5,7 +5,6 @@ max.a <- 7 # maximum productivity
 min.a <- 2 # minimum productivity
 steps <- 10 # of steps between high and low heterogenity
 equ_spw <- 80000 # equilibrium abundance (assumes all pops are the same size)
-min_cor <- -0.1 # minimum value of degree of correlation (with 10 pops cannot go lower than ... )
 
 inputs <- hetero_prod_func(pops, max.a, min.a, steps, equ_spw,"No","Yes") # generate matrix of alphas and betas
 alpha<- inputs$alphas[10,]
@@ -23,7 +22,7 @@ Preturn <- c(0,0,1,0)
 for.error <- 0.1
 OU <- 0
 
-num.sims <- 4
+num.sims <- 100
 
 time_period <- c(48:51)
 
