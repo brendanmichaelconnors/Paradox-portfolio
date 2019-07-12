@@ -1,7 +1,7 @@
 ########################################################################################
 # richness_sims.R
 #
-# Mixed-stock fishery simulaitons across range of rishness, synchrony and stock 
+# Mixed-stock fishery simulations across range of richness, synchrony and stock 
 #   productivies
 # Last updated: July 5, 2019
 # Author: B. Connors (DFO)
@@ -15,7 +15,7 @@
   max.a <- 7 # maximum productivity
   min.a <- 2 # minimum productivity
   steps <- 10 # of steps between high and low heterogenity
-  equ_spw <- 800000 # equilibrium abundance (assumes all pops are the same size)
+  equ_spw <- 400000 # equilibrium abundance (assumes all pops are the same size)
   min_cor <- 0 # minimum value of degree of correlation (with 10 pops cannot go lower than ... )
   
   rho.all <- array(NA,dim=c(steps,1))
@@ -25,7 +25,7 @@
   }
   
   ny = 50
-  num.sims <- 200
+  num.sims <-300
   
   phi <- 0.8
   episd <- 0.6
@@ -52,14 +52,14 @@
       
       # run simulations!
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
           mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
     }
   }
   
-  saveRDS(mean_out,"output/richness_sync_200_0.8_0.6_0010_0.1_0_heteroP8.08July2019")    
+  saveRDS(mean_out,"output/richness_sync_300_0.8_0.6_0010_0.1_0_heteroP8.12July2019")    
   
   # --- Low heterogenity in stock productivity  -----------------------------------------
   outcomes <- array(NA,dim=c(num.sims,7))
@@ -80,14 +80,14 @@
       
       # run simulations!
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
     }
   }
   
-  saveRDS(mean_out,"richness_sync_200_0.8_0.6_0010_0.1_0_heteroP2.08July2019")    
+  saveRDS(mean_out,"output/richness_sync_300_0.8_0.6_0010_0.1_0_heteroP2.12July2019")    
   
   # --- Moderate heterogenity in stock productivity  -----------------------------------------
   outcomes <- array(NA,dim=c(num.sims,7))
@@ -108,14 +108,14 @@
       
       # run simulations!
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
     }
   }
   
-  saveRDS(mean_out,"richness_sync_200_0.8_0.6_0010_0.1_0_heteroP5.08July2019")    
+  saveRDS(mean_out,"output/richness_sync_300_0.8_0.6_0010_0.1_0_heteroP5.12July2019")    
   
 
 # --- Mgmt. lever simulations ------------------------------------------------------------
@@ -137,13 +137,12 @@
   }
   
   ny = 50
-  num.sims <- 100
+  num.sims <- 200
   phi <- 0.8
   episd <- 0.6
   Preturn <- c(0,0,1,0)
   for.error <- 0.1
-  OU <- 0.0
-  
+
   outcomes <- array(NA,dim=c(num.sims,7))
   mean_out <- array(NA,dim=c(steps,steps,7),dimnames=list(seq(0,1,length.out=steps),seq(min_cor,1,length.out=steps),NULL))
   
@@ -159,7 +158,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add,for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -184,7 +183,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -209,7 +208,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -234,7 +233,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -259,7 +258,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -284,7 +283,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -309,7 +308,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -322,7 +321,7 @@
   
   master.sims_out <- rbind(master.sims_out,sims_out)
   
-  # --- Simulations: mgmt. control = 0, risk tol. = 0.751 ------------------------------------
+  # --- Simulations: mgmt. control = 0, risk tol. = 0.75 ------------------------------------
   control <- 0 
   MSY.add <- 0.75
   
@@ -334,7 +333,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -359,7 +358,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -384,7 +383,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -397,7 +396,7 @@
   
   master.sims_out <- rbind(master.sims_out,sims_out)
   
-  # --- Simulations: mgmt. control = 0, risk tol. = 1 ------------------------------------
+  # --- Simulations: mgmt. control = 0.25, risk tol. = 0.75 ------------------------------------
   control <- 0.25 
   MSY.add <- 0.75
   
@@ -409,7 +408,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -434,7 +433,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -459,7 +458,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -484,7 +483,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -509,7 +508,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -534,7 +533,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -559,7 +558,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -584,7 +583,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -609,7 +608,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -634,7 +633,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -659,7 +658,7 @@
       rho <- rho.all[jj,]		
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -684,7 +683,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -709,7 +708,7 @@
       rho <- rho.all[jj,]				
       source("MSY_hcr_function.R")				
       for (l in 1: num.sims){
-        out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
         outcomes[l,] <- out$PMs
       }
       mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
@@ -722,7 +721,85 @@
   
   master.sims_out <- rbind(master.sims_out,sims_out)
  
+  # --- Simulations: mgmt. control = 0, risk tol. = 0.35 ------------------------------------
+  control <- 0
+  MSY.add <- 0.35
+  
+  for(ii in 1: steps){
+    for(jj in 1: steps){
+      alpha<- inputs$alphas[ii,]
+      beta<- inputs$betas[ii,]
+      Ro <- log(alpha)/beta; sum(Ro)
+      rho <- rho.all[jj,]				
+      source("MSY_hcr_function.R")				
+      for (l in 1: num.sims){
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
+        outcomes[l,] <- out$PMs
+      }
+      mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
+    }
+  }
+  
+  sims_out.1 <- melt(mean_out[,,5])
+  sims_out <- cbind(sims_out.1, melt(mean_out[,,6])[,3],rep(control,(steps* steps)),rep(MSY.add,(steps* steps)),melt(mean_out[,,2])[,3])
+  colnames(sims_out)<- c("het_prod","sync","ext","CV_har","control","MSY","harvest")
+  
+  master.sims_out <- rbind(master.sims_out,sims_out)
+  
+  
+  
+  # --- Simulations: mgmt. control = 0, risk tol. = 0.3 ------------------------------------
+  control <- 0
+  MSY.add <- 0.3
+  
+  for(ii in 1: steps){
+    for(jj in 1: steps){
+      alpha<- inputs$alphas[ii,]
+      beta<- inputs$betas[ii,]
+      Ro <- log(alpha)/beta; sum(Ro)
+      rho <- rho.all[jj,]				
+      source("MSY_hcr_function.R")				
+      for (l in 1: num.sims){
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
+        outcomes[l,] <- out$PMs
+      }
+      mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
+    }
+  }
+  
+  sims_out.1 <- melt(mean_out[,,5])
+  sims_out <- cbind(sims_out.1, melt(mean_out[,,6])[,3],rep(control,(steps* steps)),rep(MSY.add,(steps* steps)),melt(mean_out[,,2])[,3])
+  colnames(sims_out)<- c("het_prod","sync","ext","CV_har","control","MSY","harvest")
+  
+  master.sims_out <- rbind(master.sims_out,sims_out)
+  
+  # --- Simulations: mgmt. control = 0, risk tol. = 0.1 ------------------------------------
+  control <- 0
+  MSY.add <- 0.1
+  
+  for(ii in 1: steps){
+    for(jj in 1: steps){
+      alpha<- inputs$alphas[ii,]
+      beta<- inputs$betas[ii,]
+      Ro <- log(alpha)/beta; sum(Ro)
+      rho <- rho.all[jj,]				
+      source("MSY_hcr_function.R")				
+      for (l in 1: num.sims){
+        out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
+        outcomes[l,] <- out$PMs
+      }
+      mean_out[ii,jj,] <- apply(outcomes,c(2),quantile,probs=c(0.5),na.rm=T)
+    }
+  }
+  
+  sims_out.1 <- melt(mean_out[,,5])
+  sims_out <- cbind(sims_out.1, melt(mean_out[,,6])[,3],rep(control,(steps* steps)),rep(MSY.add,(steps* steps)),melt(mean_out[,,2])[,3])
+  colnames(sims_out)<- c("het_prod","sync","ext","CV_har","control","MSY","harvest")
+  
+  master.sims_out <- rbind(master.sims_out,sims_out)
+  
+  
   # --- Save all combined simulation output ------------------------------------
-  saveRDS(master.sims_out,"output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.09July2019")
+  saveRDS(master.sims_out,"output/mgmt_risk_sims.200.phi_0.8.Rho_0.6.logFE_0.1.OU_0.12July2019")
   
   

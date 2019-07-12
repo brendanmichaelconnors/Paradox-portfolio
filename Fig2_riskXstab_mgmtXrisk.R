@@ -11,7 +11,8 @@
 
 indexx<- 90 # set index (or "slice"); columns are synchrony and rows are heterogenity in productivity
 colors <- viridis(5)
-risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.09July2019")
+risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.12July2019")
+min_cor = 0
 
 jpeg("figures/fig_2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.09July2019.jpeg",width=6.5, height=3.25, units="in",res=800)
 #dev.new(width=8, height=4,new=FALSE)
@@ -191,7 +192,7 @@ stability<-as.matrix(predict(data.loess, newdata = grid))
 ext[ext<0]<-0
 points(stability[indexx,], ext[indexx,],col=colors[2],type="l",lwd=3)
 
-sims_out <- subset(long_sims, control == 0 & MSY == 0.25)
+sims_out <- subset(long_sims, control == 0 & MSY == 0.1)
 x <- as.numeric(paste(sims_out[,1]))
 y <- as.numeric(paste(sims_out[,2]))
 z <-as.numeric(sims_out[,3]*100)

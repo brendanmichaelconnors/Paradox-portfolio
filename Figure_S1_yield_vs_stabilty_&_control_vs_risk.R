@@ -1,6 +1,6 @@
 indexx<- 90 # set index (or "slice"); columns are synchrony and rows are heterogenity in productivity
 colors <- viridis(5)
-risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.Dec282018")
+risk_sims <-readRDS(file = "output/mgmt_risk_sims.100.phi_0.8.Rho_0.6.logFE_0.1.OU_0.12July2019")
 
 jpeg("figures/fig_S1_phi_0.8.Rho_0.6.logFE_0.1.OU_0.Jan212019.jpeg",width=6.5, height=3.25, units="in",res=800)
 #dev.new(width=8, height=4,new=FALSE)

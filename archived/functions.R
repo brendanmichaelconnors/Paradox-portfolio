@@ -30,6 +30,7 @@ SC.eq <- function(U,a,b){
 #------------------------------------------------------------------------------#
 # ny <- the number of years on top of a 20 year initialization
 # Ro <- the sub-stock recruiment at time zero
+# vcov.matrix <- the expected correlation in recruitment within and among stocks
 # rho <- the expected correlation among stocks
 # phi <- the expected correlation through time
 # Preturn <- the expected proportion of spawners from age 4-7
@@ -39,15 +40,15 @@ SC.eq <- function(U,a,b){
 # control <- degree of management control (1 is perfect stock specific Umsy, 0 is aggregate Umsy)
 # MSY.add <- degree of downward adjustment of Umsy (e.g., 1 is none, 0.5 is 50% reduction in realized harvest rate) 
 
-process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.error){
+process = function(ny,Ro,rho,phi,Preturn,U,alpha,beta,control,MSY.add,for.error){
 	ny = ny+20
 	ns = length(Ro) #number of sub-stocks
 
 	#Create correlation among stocks in recruitment residuals
-	R <- matrix(rho,ns,ns) #empty correlation matrix
+	R <- matrix(rho,ns,ns) #correlation matrix
 	for(i in 1:ns)R[i,i] <- 1
 	V <- diag(rep(episd,ns)) # diagonal matrix of sqrt(variances)
-	Sig <- V %*% R %*% V #variance-covariance matrix
+	Sig <- V %*% R %*% V#cov matrix
 	epi = rmvnorm(n=ny, sigma=Sig)
 
 	#Build time series of Spawners (S), abundance of returning spawners pre-harvest
@@ -281,9 +282,9 @@ filled.legend <-
 
 risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.tolerance, indexx, row){
   
-  if(row == 1){ylim = 25}
+  if(row == 1){ylim = 20}
   if(row == 2){ylim = 10}
-  if(row == 3){ylim = 10}
+  if(row == 3){ylim = 6}
   
   sims_out <- subset(long_sims, control == 0 & MSY == risk.tolerance)
   x <- as.numeric(paste(sims_out[,1]))
@@ -299,7 +300,7 @@ risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.
   grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
   stability<-as.matrix(predict(data.loess, newdata = grid))
   ext[ext<0]<-0
-  plot(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3,ylim=c(0, ylim),xlim=c(0.75,2.75),yaxt="n",xaxt="n",ylab="",xlab="")
+  plot(stability[indexx,], ext[indexx,],col=colors[5],type="l",lwd=3,ylim=c(0, ylim),xlim=c(0.75,2.75),yaxt="n",xaxt="n",ylab="",xlab="")
   
   sims_out <- subset(long_sims, control == 0.12 & MSY == risk.tolerance)
   x <- as.numeric(paste(sims_out[,1]))
@@ -315,7 +316,7 @@ risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.
   grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
   stability<-as.matrix(predict(data.loess, newdata = grid))
   ext[ext<0]<-0
-  points(stability[indexx,], ext[indexx,],col=colors[3],type="l",lwd=3)
+  points(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3)
   
   sims_out <- subset(long_sims, control == 0.25 & MSY == risk.tolerance)
   x <- as.numeric(paste(sims_out[,1]))
@@ -331,9 +332,25 @@ risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.
   grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
   stability<-as.matrix(predict(data.loess, newdata = grid))
   ext[ext<0]<-0
-  points(stability[indexx,], ext[indexx,],col=colors[2],type="l",lwd=3)
+  points(stability[indexx,], ext[indexx,],col=colors[3],type="l",lwd=3)
   
   sims_out <- subset(long_sims, control == 0.5 & MSY == risk.tolerance)
+  x <- as.numeric(paste(sims_out[,1]))
+  y <- as.numeric(paste(sims_out[,2]))
+  z <-as.numeric(sims_out[,3]*100)
+  data.loess= loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  ext<-as.matrix(predict(data.loess, newdata = grid))
+  x <- as.numeric(paste(sims_out[,1]))+0.00000001
+  y <- as.numeric(paste(sims_out[,2]))+0.00000001
+  z <-as.numeric(1/sims_out[,4])
+  data.loess = loess(z~x*y)
+  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
+  stability<-as.matrix(predict(data.loess, newdata = grid))
+  ext[ext<0]<-0
+  points(stability[indexx,], ext[indexx,],col=colors[2],type="l",lwd=3)
+  
+  sims_out <- subset(long_sims, control == 0.75 & MSY == risk.tolerance)
   x <- as.numeric(paste(sims_out[,1]))
   y <- as.numeric(paste(sims_out[,2]))
   z <-as.numeric(sims_out[,3]*100)
@@ -362,99 +379,7 @@ risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.
   }   
   
   if(incl.legend == "TRUE"){
-    legend(1.5,9,c("0","0.125","0.25","0.5"),lwd=3,lty=1,col=c(colors[4],colors[3],colors[2],colors[1]),cex=0.9, bty="n")
+    legend(1.5,9,c("0","0.125","0.25","0.5","0.75"),lwd=3,lty=1,col=c(colors[5],colors[4],colors[3],colors[2],colors[1]),cex=0.9, bty="n")
     text(2,9,"Mgmt. control (C*)",cex=0.9)
-  }
-}
-
-yield_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.tolerance, indexx, row){
-  
-  if(row == 1){ylim = 100}
-  if(row == 2){ylim = 100}
-  if(row == 3){ylim = 100}
-  
-  long_sims <- round(long_sims, digits = 2)
-  long_sims$max.yld <- long_sims$harvest/max(long_sims$harvest)
-  
-  sims_out <- subset(long_sims, control == 0 & MSY == risk.tolerance)
-  
-  x <- as.numeric(paste(sims_out[,1]))
-  y <- as.numeric(paste(sims_out[,2]))
-  z <-as.numeric(sims_out[,8]*100)
-  data.loess= loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  ext<-as.matrix(predict(data.loess, newdata = grid))
-  x <- as.numeric(paste(sims_out[,1]))+0.00000001
-  y <- as.numeric(paste(sims_out[,2]))+0.00000001
-  z <-as.numeric(1/sims_out[,4])
-  data.loess = loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  stability<-as.matrix(predict(data.loess, newdata = grid))
-  ext[ext<0]<-0
-  plot(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3,ylim=c(0, ylim),xlim=c(0.75,2.75),yaxt="n",xaxt="n",ylab="",xlab="")
-  
-  sims_out <- subset(long_sims, control == 0.12 & MSY == risk.tolerance)
-  x <- as.numeric(paste(sims_out[,1]))
-  y <- as.numeric(paste(sims_out[,2]))
-  z <-as.numeric(sims_out[,8]*100)
-  data.loess= loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  ext<-as.matrix(predict(data.loess, newdata = grid))
-  x <- as.numeric(paste(sims_out[,1]))+0.00000001
-  y <- as.numeric(paste(sims_out[,2]))+0.00000001
-  z <-as.numeric(1/sims_out[,4])
-  data.loess = loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  stability<-as.matrix(predict(data.loess, newdata = grid))
-  ext[ext<0]<-0
-  points(stability[indexx,], ext[indexx,],col=colors[3],type="l",lwd=3)
-  
-  sims_out <- subset(long_sims, control == 0.25 & MSY == risk.tolerance)
-  x <- as.numeric(paste(sims_out[,1]))
-  y <- as.numeric(paste(sims_out[,2]))
-  z <-as.numeric(sims_out[,8]*100)
-  data.loess= loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  ext<-as.matrix(predict(data.loess, newdata = grid))
-  x <- as.numeric(paste(sims_out[,1]))+0.00000001
-  y <- as.numeric(paste(sims_out[,2]))+0.00000001
-  z <-as.numeric(1/sims_out[,4])
-  data.loess = loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  stability<-as.matrix(predict(data.loess, newdata = grid))
-  ext[ext<0]<-0
-  points(stability[indexx,], ext[indexx,],col=colors[2],type="l",lwd=3)
-  
-  sims_out <- subset(long_sims, control == 0.5 & MSY == risk.tolerance)
-  x <- as.numeric(paste(sims_out[,1]))
-  y <- as.numeric(paste(sims_out[,2]))
-  z <-as.numeric(sims_out[,8]*100)
-  data.loess= loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  ext<-as.matrix(predict(data.loess, newdata = grid))
-  x <- as.numeric(paste(sims_out[,1]))+0.00000001
-  y <- as.numeric(paste(sims_out[,2]))+0.00000001
-  z <-as.numeric(1/sims_out[,4])
-  data.loess = loess(z~x*y)
-  grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
-  stability<-as.matrix(predict(data.loess, newdata = grid))
-  ext[ext<0]<-0
-  points(stability[indexx,], ext[indexx,],col=colors[1],type="l",lwd=3)
-  
-  if(yaxis_plot=="TRUE"){
-    axis(2,las=2)  
-  }else{
-    axis(2,las=2,labels = F)  
-  }  
-  
-  if(xaxis_plot=="TRUE"){
-    axis(1)  
-  }else{
-    axis(1,labels = F)  
-  }   
-  
-  if(incl.legend == "TRUE"){
-    legend(1.5,95,c("0","0.125","0.25","0.5"),lwd=3,lty=1,col=c(colors[4],colors[3],colors[2],colors[1]),cex=0.9, bty="n")
-    text(2,95,"Mgmt. control (C*)",cex=0.9)
   }
 }

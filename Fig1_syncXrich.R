@@ -8,12 +8,13 @@
 ########################################################################################
 
 # --- Load simulation output -----------------------------------------------------------
-mean_out <-readRDS(file = "output/richness_sync_200_0.8_0.6_0010_0.1_0_heteroP8.08July2019")
+mean_out <-readRDS(file = "output/richness_sync_100_0.8_0.6_0010_0.1_0_heteroP5.11July2019")
+
   max.catch_hetP_2 <- c(max(mean_out[1,,2]),max(mean_out[2,,2]),max(mean_out[3,,2]),max(mean_out[4,,2]),max(mean_out[5,,2]),max(mean_out[6,,2]),max(mean_out[7,,2]),max(mean_out[8,,2]),max(mean_out[9,,2]),max(mean_out[10,,2]))
   max.catch <- cbind(max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2)
   min_cor=0
 
-jpeg("figures/fig_1_phi_0.8.Rho_0.6.logFE_0.10.OU_0.hetP8.08July2019.jpeg",width=6, height=5.15, units="in",res=800)
+jpeg("figures/fig_1_phi_0.8.Rho_0.6.logFE_0.10.OU_0.hetP5.11July2019.jpeg",width=6, height=5.15, units="in",res=800)
 #dev.new(width=6, height=5,new=FALSE)
   par(mfrow=c(2,2),bty="o", mar=c(3,3,2.5,5),oma=c(2,2,1,1))#set dimensions to plots
 

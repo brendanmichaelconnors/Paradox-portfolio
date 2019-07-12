@@ -1,10 +1,19 @@
-# define characteristics of population complex 
+########################################################################################
+# Kobe_sims.R
+#
+# Run simulations across 2 combinations of mgmt. control and risk tolerance based on 
+#   characteristics of large mixed-stock scokeye fisheries for illustrationin Kobe plots
+# Last updated: July 5, 2019
+# Author: B. Connors (DFO)
+#        
+########################################################################################
 
+# define characteristics of population complex 
 pops <- 12 # of populations (MUST BE EVEN)
 max.a <- 7 # maximum productivity
 min.a <- 2 # minimum productivity
 steps <- 10 # of steps between high and low heterogenity
-equ_spw <- 80000 # equilibrium abundance (assumes all pops are the same size)
+equ_spw <- 40000 # equilibrium abundance (assumes all pops are the same size)
 
 inputs <- hetero_prod_func(pops, max.a, min.a, steps, equ_spw,"No","Yes") # generate matrix of alphas and betas
 alpha<- inputs$alphas[10,]
@@ -15,36 +24,40 @@ Smsy <- (1-lambert_W0(exp(1-log(alpha))))/beta
 Uopt <- round(0.5* log(alpha)-0.07* log(alpha)^2,digits=2)
 
 ny = 50
-phi <- 0.1
-rho <- 0.8
-episd <- 0.6
+phi <- 0.3
+rho <- 0.25
+episd <- 0.4
 Preturn <- c(0,0,1,0)
-for.error <- 0.1
+for.error <- 0.05
 OU <- 0
-
 num.sims <- 100
 
-time_period <- c(48:51)
+# set management control and and risk tolerance
+HC <- 0.85
+LC <- 0
+  
+HR <- 1
+LR <- 0.5  
 
 # high risk, low mgmt control
 
-control <- 0 
-MSY.add <- 1
+control <- LC 
+MSY.add <- HR
 
 sim_output <- matrix(NA,pops,4,dimnames=list(NULL,c("S_Smsy","F_Fmsy","control","risk")))
 sim_output.2 <- matrix(NA,pops,4,dimnames=list(NULL,c("S_Smsy","F_Fmsy","control","risk")))
 
 source("MSY_hcr_function.R")				
 for (i in 1:num.sims){
-  out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+  out <- process(ny, Ro, rho, phi, Preturn, episd , alpha, beta, control, MSY.add, for.error)
   if(i==1){
-    sim_output[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output[,3] <- rep(control,pops)
     sim_output[,4] <- rep(MSY.add,pops)
   }else{
-    sim_output.2[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output.2[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output.2[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output.2[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output.2[,3] <- rep(control,pops)
     sim_output.2[,4] <- rep(MSY.add,pops)
     
@@ -56,21 +69,21 @@ full.sims.top <- sim_output
 
 # high risk, high mgmt control
 
-control <- 0.85
-MSY.add <- 1
+control <- HC
+MSY.add <- HR
 
 source("MSY_hcr_function.R")				
 for (i in 1:num.sims){
-  out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+  out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
   if(i==1){
-    sim_output[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output[,3] <- rep(control,pops)
     sim_output[,4] <- rep(MSY.add,pops)
     
   }else{
-    sim_output.2[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output.2[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output.2[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output.2[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output.2[,3] <- rep(control,pops)
     sim_output.2[,4] <- rep(MSY.add,pops)
     sim_output <- rbind(sim_output,sim_output.2)
@@ -86,23 +99,23 @@ full.sims.top <- full.sims.top[complete.cases(full.sims.top),]
 
 # low risk, low mgmt control
 
-control <- 0 
-MSY.add <- 0.5
+control <- LC 
+MSY.add <- LR
 
 sim_output <- matrix(NA,pops,4,dimnames=list(NULL,c("S_Smsy","F_Fmsy","control","risk")))
 sim_output.2 <- matrix(NA,pops,4,dimnames=list(NULL,c("S_Smsy","F_Fmsy","control","risk")))
 
 source("MSY_hcr_function.R")				
 for (i in 1:num.sims){
-  out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+  out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
   if(i==1){
-    sim_output[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output[,3] <- rep(control,pops)
     sim_output[,4] <- rep(MSY.add,pops)
   }else{
-    sim_output.2[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output.2[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output.2[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output.2[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output.2[,3] <- rep(control,pops)
     sim_output.2[,4] <- rep(MSY.add,pops)
     
@@ -115,21 +128,21 @@ full.sims.bottom <- sim_output
 
 # low risk, high mgmt control
 
-control <- 0.85
-MSY.add <- 0.5
+control <- HC
+MSY.add <- LR
 
 source("MSY_hcr_function.R")				
 for (i in 1:num.sims){
-  out <- process(ny, Ro, rho, phi, Preturn, U, alpha, beta, control, MSY.add, for.error)
+  out <- process(ny, Ro, rho, phi, Preturn, episd, alpha, beta, control, MSY.add, for.error)
   if(i==1){
-    sim_output[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output[,3] <- rep(control,pops)
     sim_output[,4] <- rep(MSY.add,pops)
     
   }else{
-    sim_output.2[,1] <- apply(out$S[48:51,],c(2),mean)/Smsy
-    sim_output.2[,2] <- apply(out$H[48:51,]/out$N[48:51,],c(2),mean)/Uopt
+    sim_output.2[,1] <- apply(out$S[41:51,],c(2),mean)/Smsy
+    sim_output.2[,2] <- apply(out$H[41:51,]/out$N[41:51,],c(2),mean)/Uopt
     sim_output.2[,3] <- rep(control,pops)
     sim_output.2[,4] <- rep(MSY.add,pops)
     sim_output <- rbind(sim_output,sim_output.2)
@@ -144,6 +157,6 @@ full.sims.bottom[,4] <- as.factor(full.sims.bottom[,4])
 full.sims.bottom <- full.sims.bottom[complete.cases(full.sims.bottom),]
 
 
-btml <- rbind(full.sims.top[which(full.sims.top$control=="0"),],full.sims.bottom[which(full.sims.bottom$control=="0"),])
+btml <- rbind(full.sims.top[which(full.sims.top$control==LC),],full.sims.bottom[which(full.sims.bottom$control==LC),])
 
-btmr <- rbind(full.sims.top[which(full.sims.top$control=="0.85"),],full.sims.bottom[which(full.sims.bottom$control=="0.85"),])
+btmr <- rbind(full.sims.top[which(full.sims.top$control==HC),],full.sims.bottom[which(full.sims.bottom$control==HC),])
