@@ -27,7 +27,7 @@ ny = 50
 phi <- 0.3
 rho <- 0.25
 episd <- 0.4
-Preturn <- c(0,0,1,0)
+Preturn <- c(0,0.7,0.3,0)
 for.error <- 0.05
 OU <- 0
 num.sims <- 100

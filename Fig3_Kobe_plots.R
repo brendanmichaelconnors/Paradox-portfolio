@@ -14,14 +14,15 @@ source("Kobe_sims.R")
 
 output <- rbind(btml,btmr)
 
-XX <- "0.85" # mgmt. control
-YY <- "1" # conservation risk tolerance
+XX <- "0" # mgmt. control
+YY <- "0.5" # conservation risk tolerance
 
 OFingT <- 0.2 # overfishing threshold
 OFedT <- 0.2 # overfished threshold
 
 kobe_data <- output[which(output$control==XX & output$risk  == YY),]
 
+Sweet_spot <- nrow(subset(kobe_data,F_Fmsy < (1+OFingT) & S_Smsy > (1-OFedT) & F_Fmsy > (1-OFingT) & S_Smsy < (1+OFedT)))/nrow(kobe_data)
 Overfished_overfishging <- nrow(subset(kobe_data,F_Fmsy >(1+OFingT) & S_Smsy < (1-OFedT)))/nrow(kobe_data)
 Overfished_underfishging <- nrow(subset(kobe_data,F_Fmsy < (1-OFingT) & S_Smsy < (1-OFedT)))/nrow(kobe_data)
 Underfished_overfishging <- nrow(subset(kobe_data,F_Fmsy > (1+OFingT) & S_Smsy > (1+OFedT)))/nrow(kobe_data)
@@ -33,7 +34,9 @@ round(cbind(Overfished_overfishging,
       Overfished_underfishging,
       Underfished_overfishging,
       Underfished_underfishging,
-      Overfishging,Overfished
+      Overfishging,
+      Overfished,
+      Sweet_spot
             ),
       digits=2)
 
@@ -127,6 +130,6 @@ p8 <- ggplot() +
   geom_vline(xintercept=1)+ 
   scale_y_reverse()
 
-jpeg("figures/fig_3_kobe_100sims_phi_0.8.Rho_0.6.logFE_05.OU_0.11July2019.jpeg",width=6, height=6, units="in",res=800)
+jpeg("figures/fig_3_kobe_100sims_phi_0.8.Rho_0.6.logFE_05.OU_0.12July2019.jpeg",width=6, height=6, units="in",res=800)
   ggarrange(p1,p2,p3,p4,p5,p6,p7,p8, labels = c("A", "B", "C", "D", "E", "F", "G", "H"))
 dev.off()

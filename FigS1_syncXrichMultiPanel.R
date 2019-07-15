@@ -1,7 +1,7 @@
 ########################################################################################
-# FigS2_syncXrichMultiPanel.R
+# FigS1_syncXrichMultiPanel.R
 #
-# Figure S2: Influence of different dimensions of biodiversity on fishery performance
+# Figure S1: Influence of different dimensions of biodiversity on fishery performance
 # Last updated: July 5, 2019
 # Author: B. Connors (DFO)
 #        
@@ -9,22 +9,22 @@
 
 
 # --- Load simulation output -----------------------------------------------------------
-sim_hetP_2 <-readRDS(file = "output/richness_sync_100_0.8_0.6_0010_0.1_0_heteroP2.11July2019")
+sim_hetP_2 <-readRDS(file = "output/richness_sync_300_0.8_0.6_0010_0.1_0_heteroP2.12July2019")
   max.catch_hetP_2 <- c(max(sim_hetP_2[1,,2]),max(sim_hetP_2[2,,2]),max(sim_hetP_2[3,,2]),max(sim_hetP_2[4,,2]),max(sim_hetP_2[5,,2]),max(sim_hetP_2[6,,2]),max(sim_hetP_2[7,,2]),max(sim_hetP_2[8,,2]),max(sim_hetP_2[9,,2]),max(sim_hetP_2[10,,2]))
   max.catch_hetP_2 <- cbind(max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2,max.catch_hetP_2)
 
-sim_hetP_8 <-readRDS(file = "output/richness_sync_100_0.8_0.6_0010_0.1_0_heteroP8.11July2019")
+sim_hetP_8 <-readRDS(file = "output/richness_sync_300_0.8_0.6_0010_0.1_0_heteroP8.12July2019")
   max.catch_hetP_8 <- c(max(sim_hetP_8[1,,2]),max(sim_hetP_8[2,,2]),max(sim_hetP_8[3,,2]),max(sim_hetP_8[4,,2]),max(sim_hetP_8[5,,2]),max(sim_hetP_8[6,,2]),max(sim_hetP_8[7,,2]),max(sim_hetP_8[8,,2]),max(sim_hetP_8[9,,2]),max(sim_hetP_8[10,,2]))
   max.catch_hetP_8 <- cbind(max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8,max.catch_hetP_8)
 
-sim_hetP_6 <-readRDS(file = "output/richness_sync_100_0.8_0.6_0010_0.1_0_heteroP5.11July2019")
+sim_hetP_6 <-readRDS(file = "output/richness_sync_300_0.8_0.6_0010_0.1_0_heteroP5.12July2019")
   max.catch_hetP_6 <- c(max(sim_hetP_6[1,,2]),max(sim_hetP_6[2,,2]),max(sim_hetP_6[3,,2]),max(sim_hetP_6[4,,2]),max(sim_hetP_6[5,,2]),max(sim_hetP_6[6,,2]),max(sim_hetP_6[7,,2]),max(sim_hetP_6[8,,2]),max(sim_hetP_6[9,,2]),max(sim_hetP_6[10,,2]))
   max.catch_hetP_6 <- cbind(max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6,max.catch_hetP_6)
 
 min_cor<-0
 
 # --- Generate figure ----------------------------------------------------------------
-jpeg("figures/fig_S2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.11July2019.jpeg",width=8, height=7, units="in",res=800)
+jpeg("figures/fig_S1_phi_0.8.Rho_0.6.logFE_0.1.OU_0.12July2019.jpeg",width=8, height=7, units="in",res=800)
 #dev.new(width=8, height=10,new=FALSE)
 
 # Set up plotting region
