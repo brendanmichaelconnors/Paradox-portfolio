@@ -12,7 +12,7 @@
  
 #------------ Function -----------------------------------------------
 
-hcr = function(egfloor, run,for.error,OU){
+hcr = function(egfloor, run, for.error){
 	run.est <- run * (rlnorm(1,0,for.error)); if(is.na(run.est)==TRUE){run.est <- run}
 	if(run.est - egfloor <= 0){hr = 0}
 	if(run.est > egfloor){ hr = (run.est - egfloor)/run}
@@ -30,7 +30,7 @@ runs <- seq(1,1000000,length.out=10000)
 
 har.rate.all<- matrix(NA,length(runs),1)
 	
-	for(iii in 1:length(runs)){har.rate.all[iii] <- hcr(sum(smsy),runs[iii],0,0)}
+	for(iii in 1:length(runs)){har.rate.all[iii] <- hcr(sum(smsy),runs[iii],0)}
 
 realized_har <- cbind(runs, har.rate.all)
 
@@ -40,7 +40,7 @@ har.rate <- array(NA,dim=c(length(runs),2, length(alpha)+1))
 
 for(w in 1:length(alpha)){
 	for(iii in 1:length(runs)){
-		har.rate[iii,2,w] <- hcr(smsy[w],runs[iii],0,0)
+		har.rate[iii,2,w] <- hcr(smsy[w],runs[iii],0)
 		har.rate[iii,1,w] <- runs[iii]
 		}
 	}
