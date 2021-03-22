@@ -1,4 +1,9 @@
-Work in progress version of code to simulate an age-structured, multi-stock fish population complex that experiences a mixed stock fishery with varying degrees of management control. This code is part of a set of analyses that are used to to explore how different aspects of diversity (e.g., number of populations, asynchrony among populations, differences in productivity among populations) and fishery management control (e.g., the ability of the managers to control and allocate harvest) influence the ability of fisheries to be 1) productive (maximize yield from the system), 2) sustainable (avoid accidental overharvest and extirpation of populations), and 3) stable over time. Collaboration with J. Moore and E. Hodgson (SFU).
+Data and code to reproduce analyses and figures in:
+>Conservation risks and portfolio effects in mixed-stock fisheries. In preparation. Moore J.W, B. Connors, and E. Hodgson. 
+
+This projec consists of two main components:
+1. A simulation model for an age-structured, multi-stock fish population complex that is used to explore how different aspects of diversity (e.g., number and eveness of populations, asynchrony among populations, differences in productivity among populations) and fishery management control (e.g., the ability of the managers to control and allocate harvest) influence the fishery outcomes.
+2. Bayesian spawner-recruitment models fit to data from three large mixed-stock sockeye salmon fisheries to charactize change in among population status over time.
 
 ## Files
 - `load.R`: Loads packages and scripts necessary for analysis. This file should be
