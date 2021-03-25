@@ -8,7 +8,7 @@ This project has two main components:
 ## Files
 - `load.R`: Loads packages and functions necessary for analysis. This file should be sourced prior to running other scripts.
 - `simulations.R`: Runs all mixed-stock fishery simulations and saves output as RDS files in the `output` sub-folder.
-- `kobe_simulations.R`: Run illustrative mixed-stock fishery simulations across 2 combinations of management control and over-fishing risk tolerance for Kobe plots. This is sourced when Figure 3 is generated in `figures.R`.
+- `kobe_simulations.R`: Runs illustrative mixed-stock fishery simulations across 2 combinations of management control and over-fishing risk tolerance for Kobe plots. This is sourced when Figure 3 is generated in `figures.R`.
 - `figures.R`: Generates all figures based on the mixed-stock fishery simulations and saves them in the `figures` sub-folder.
 - `functions.R`: All required functions; sourced by `load.R`. The one exception is the harvest control rule function  (`MSY_hcr_function.R`) which needs to be called multiple times during simulations.
 
