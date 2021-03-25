@@ -1,10 +1,8 @@
 ########################################################################################
-# Kobe_sims.R
+# kobe_simulations.R
 #
 # Run simulations across 2 combinations of mgmt. control and risk tolerance based on 
-#   characteristics of large mixed-stock scokeye fisheries for illustrationin Kobe plots
-# Last updated: July 5, 2019
-# Author: B. Connors (DFO)
+#   characteristics of large mixed-stock sockeye fisheries for illustrative Kobe plots
 #        
 ########################################################################################
 
@@ -12,7 +10,7 @@
 pops <- 12 # of populations (MUST BE EVEN)
 max.a <- 7 # maximum productivity
 min.a <- 2 # minimum productivity
-steps <- 10 # of steps between high and low heterogenity
+steps <- 10 # of steps between high and low heterogeneity
 equ_spw <- 40000 # equilibrium abundance (assumes all pops are the same size)
 
 inputs <- hetero_prod_func(pops, max.a, min.a, steps, equ_spw,"No","Yes") # generate matrix of alphas and betas
@@ -160,3 +158,32 @@ full.sims.bottom <- full.sims.bottom[complete.cases(full.sims.bottom),]
 btml <- rbind(full.sims.top[which(full.sims.top$control==LC),],full.sims.bottom[which(full.sims.bottom$control==LC),])
 
 btmr <- rbind(full.sims.top[which(full.sims.top$control==HC),],full.sims.bottom[which(full.sims.bottom$control==HC),])
+
+# generate some summary statistics
+output <- rbind(btml,btmr)
+
+XX <- "0" # mgmt. control
+YY <- "0.5" # conservation risk tolerance
+
+OFingT <- 0.2 # over-fishing threshold
+OFedT <- 0.2 # over-fished threshold
+
+kobe_data <- output[which(output$control==XX & output$risk  == YY),]
+
+Sweet_spot <- nrow(subset(kobe_data,F_Fmsy < (1+OFingT) & S_Smsy > (1-OFedT) & F_Fmsy > (1-OFingT) & S_Smsy < (1+OFedT)))/nrow(kobe_data)
+Overfished_overfishging <- nrow(subset(kobe_data,F_Fmsy >(1+OFingT) & S_Smsy < (1-OFedT)))/nrow(kobe_data)
+Overfished_underfishging <- nrow(subset(kobe_data,F_Fmsy < (1-OFingT) & S_Smsy < (1-OFedT)))/nrow(kobe_data)
+Underfished_overfishging <- nrow(subset(kobe_data,F_Fmsy > (1+OFingT) & S_Smsy > (1+OFedT)))/nrow(kobe_data)
+Underfished_underfishging <- nrow(subset(kobe_data,F_Fmsy < (1-OFingT) & S_Smsy > (1+OFedT)))/nrow(kobe_data)
+Overfishging <- nrow(subset(kobe_data,F_Fmsy >(1+OFingT) ))/nrow(kobe_data)
+Overfished <-   nrow(subset(kobe_data,S_Smsy < (1-OFedT)))/nrow(kobe_data)
+
+round(cbind(Overfished_overfishging,
+            Overfished_underfishging,
+            Underfished_overfishging,
+            Underfished_underfishging,
+            Overfishging,
+            Overfished,
+            Sweet_spot
+  ),
+  digits=2)

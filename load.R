@@ -1,6 +1,5 @@
 ## Load functions and libraries for analysis
 
-
 source("functions.R") 
 
 library(MASS)

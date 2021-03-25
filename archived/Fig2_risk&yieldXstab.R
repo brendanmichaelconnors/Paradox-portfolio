@@ -8,14 +8,14 @@
 ########################################################################################
 
 # --- Load simulation output -----------------------------------------------------------
-risk_sims <-readRDS(file = "output/mgmt_risk_sims.200.phi_0.8.Rho_0.6.logFE_0.1.OU_0.12July2019")
+risk_sims <-readRDS(file = "output/mgmt_risk_sims.200.phi_0.8.Rho_0.6.logFE_0.1.OU_0.08March2021")
 long_sims <- round(risk_sims, digits = 2)
 long_sims$max.yld <- long_sims$harvest/max(long_sims$harvest)
 indexx<- 50 # set index (or "slice"); columns are synchrony and rows are heterogenity in productivity
 colors <- viridis(4)
 min_cor = 0
 
-jpeg("figures/fig_2_phi_0.8.Rho_0.6.logFE_0.1.OU_0.1July2019.jpeg",width=5, height=5.15, units="in",res=800)
+jpeg("figures/fig_2_Mar2021.jpeg",width=5, height=5.15, units="in",res=800)
 #dev.new(width=8, height=4,new=FALSE)
 par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
 
@@ -35,7 +35,7 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
     grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
     stability<-as.matrix(predict(data.loess, newdata = grid))
     plot(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3,ylim=c(0,21),xlim=c(0.8,2.4),yaxt="n",xaxt="n",ylab="Risk (% extirpated)",xlab="Stability (1/CV)")
- 
+    
   axis(1,labels=F)
   axis(2,las=2)
   mtext("Risk (% extirpated)",2,line=2.5)
@@ -91,7 +91,8 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
   legend(1.8,20,c("0","0.125","0.25","0.5"),lwd=3,lty=1,col=c(colors[4],colors[3],colors[2],colors[1]),cex=0.8, bty="n")
   text(2,20,"Mgmt. control (C*)",cex=0.8)
   mtext("A",3,line=0.2,adj=-0.1,font=2,cex=1.3)
-
+  box(col="grey")
+  
   # Panel B
   sims_out <- subset(long_sims, control == 0 & MSY == 1)
     x <- as.numeric(paste(sims_out[,1]))
@@ -108,7 +109,7 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
     grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
     stability<-as.matrix(predict(data.loess, newdata = grid))
     plot(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3,ylim=c(0,21),xlim=c(0.8,2.4),yaxt="n",xaxt="n",ylab="",xlab="")
-
+    
   axis(1,labels = F)
   axis(2,las=2,labels = F)
   mtext("B",3,line=0.2,adj=-0.1,font=2,cex=1.3)
@@ -163,7 +164,8 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
 
   legend(1.8, 20,c("1","0.88","0.75","0.5"),lwd=3,lty=1,col=c(colors[4],colors[3],colors[2],colors[1]),cex=0.8, bty="n")
   text(2, 20,"OF tolerance (P*)",cex=0.8)
-
+  box(col="grey")
+  
 # Panel C
   sims_out <- subset(long_sims, control == 0 & MSY == 1)
     x <- as.numeric(paste(sims_out[,1]))
@@ -179,7 +181,7 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
     grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
     stability<-as.matrix(predict(data.loess, newdata = grid))
     plot(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3,ylim=c(0,100),xlim=c(0.8,2.4),yaxt="n",ylab="",xlab="Stability (1/CV)")
-
+    
   axis(2,las=2)
   mtext("Yield (% of maximum)",2,line=2.5)
   
@@ -230,6 +232,7 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
     points(stability[indexx,], ext[indexx,],col=colors[1],type="l",lwd=3)
   
   mtext("C",3,line=0.25,adj=-0.1,font=2,cex=1.3)
+  box(col="grey")
   
   # Panel D
   sims_out <- subset(long_sims, control == 0 & MSY == 1)
@@ -246,7 +249,7 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
     grid = expand.grid(list(x = seq(0,1,length.out=100), y = seq(min_cor,1,length.out=100)))
     stability<-as.matrix(predict(data.loess, newdata = grid))
     plot(stability[indexx,], ext[indexx,],col=colors[4],type="l",lwd=3,ylim=c(0,100),xlim=c(0.8,2.4),yaxt="n",xaxt="n",ylab="",xlab="")
-
+    
   axis(1)
   axis(2,las=2,labels = F)
   mtext("Stability (1/CV)",1,line=1.5,outer=T)
@@ -297,5 +300,6 @@ par(mfrow=c(2,2),bty="o", mar=c(1,1,1,1),oma=c(4,3,2,0))#set dimensions to plots
     stability<-as.matrix(predict(data.loess, newdata = grid))
     ext[ext<0]<-0
     points(stability[indexx,], ext[indexx,],col=colors[1],type="l",lwd=3)
-  
+    box(col="grey")
+    
 dev.off()

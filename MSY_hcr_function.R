@@ -1,12 +1,8 @@
 ######################################################################
 # MSY_hcr_function.R
-# MSY based harvest control rule function and code to generate array 
+#
+# MSY based harvest control rule function to generate array 
 #   of harvest control rules under varying degrees of control. 
-#
-# This is pretty janky but does the trick, for now
-#
-# Last updated: July 4, 2019
-# Authors: Brendan Connors (DFO)
 #
 ######################################################################
  
@@ -25,17 +21,16 @@ hcr = function(egfloor, run, for.error){
 
 smsy <- (1-lambert_W0(exp(1-log(alpha))))/beta
 
-# populate matrix of realized harvest rates across a range of run-sizes
+# populate matrix of realized mixed-stock harvest rates across a range of run-sizes
 runs <- seq(1,1000000,length.out=10000)	
 
-har.rate.all<- matrix(NA,length(runs),1)
+har.rate.all <- matrix(NA,length(runs),1)
 	
 	for(iii in 1:length(runs)){har.rate.all[iii] <- hcr(sum(smsy),runs[iii],0)}
 
 realized_har <- cbind(runs, har.rate.all)
 
-# add sub stock harvest rates under perfect control
-
+# add sub-stock harvest rates under perfect mgmt. control
 har.rate <- array(NA,dim=c(length(runs),2, length(alpha)+1))
 
 for(w in 1:length(alpha)){

@@ -1,12 +1,8 @@
 ######################################################################
 # functions.R
-# Functions for xixed-stock fishery simulaitons  
-#
-# Last updated: July 4, 2019
-# Authors: Brendan Connors (DFO), plus others for filled.contour()
+# Functions for mixed-stock fishery simulations  
 #
 ######################################################################
-
 
 #------------------------------------------------------------------------------#
 # Status function; estimates equilibrium spwn abundance and catch plus whether 
@@ -29,7 +25,7 @@ SC.eq <- function(U,a,b){
 # Multi-stock simulation function
 #------------------------------------------------------------------------------#
 # ny <- the number of years on top of a 20 year initialization
-# Ro <- the sub-stock recruiment at time zero
+# Ro <- the sub-stock recruitment at time zero
 # rho <- the expected correlation among stocks
 # phi <- the expected correlation through time
 # Preturn <- the expected proportion of spawners from age 4-7
@@ -65,7 +61,7 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 	N[6:7,2,]=R[6:7-(5),]*Preturn[2]
 	N[7,3,]=R[7-(6),]*Preturn[3]
 	
-	# Loop through years of simulation	  
+	# Loop through years of simulation	
 	for(i in (7+1):ny){
 		N[i,1,]=R[i-(4),]*Preturn[1]
 		N[i,2,]=R[i-(5),]*Preturn[2]
@@ -86,7 +82,7 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 		S_exp = Ntot[i,]-H[i,] ; S_exp[S_exp<0] = 0
 		S[i,] = S_exp
 				
-		S[i,S[i,]<50] = 0 # drive pops below a threshold to extinction
+		S[i,S[i,]<10] = 0 # drive pops below a threshold to extinction
 		R[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,]+phi*v[i-1,]+epi[i,])
 		predR[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,])
 		v[i,] = log(R[i,])-log(predR[i,])
@@ -96,7 +92,7 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 	#Output
 	S[S[,]=='NaN'] <- 0
 	Ntot[Ntot[,]=='NaN'] <- 0
-	pms <- matrix(NA,1,7) # performance measures: escapement, harvest, harvest rate, overfished, extinct, prop years failed to meet subsistance goal, CV in harvest
+	pms <- matrix(NA,1,7) # performance measures: escapement, harvest, harvest rate, overfished, extinct, prop years failed to meet subsistence goal, CV in harvest
 	over<- matrix(NA,length(alpha))
 	ext<- matrix(NA,length(alpha))
 	harvest_rate <- (H[20:ny,]/Ntot[20:ny,])[,1]
@@ -119,14 +115,14 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 	}
 
 #------------------------------------------------------------------------------#
-# Function to generate matrix of alphas and betas
+# Function to generate matrix of alphas and betas for populations of equal size
 #------------------------------------------------------------------------------#	
 # pops <- # of populations (MUST BE EVEN)
 # max.a <- maximum productivity
 # min.a <- minimum productivity
-# steps <- # of steps between high and low heterogenity
+# steps <- # of steps between high and low heterogeneity
 # equ_spw <- equilibrium abundance (assumes all pops are the same size)
-# var_pop <- maintain eveness in variation in productivity across populations? ("Yes" or "No")
+# var_pop <- maintain evenness in variation in productivity across populations? ("Yes" or "No")
 # fixed_size <- Should total size remain the same regardless of richness? ("Yes" or "No") if yes then it is equal to equ_spw
 
 hetero_prod_func = function(pops, max.a, min.a, steps, equ_spw,var_pop,fixed_size){
@@ -156,6 +152,62 @@ hetero_prod_func = function(pops, max.a, min.a, steps, equ_spw,var_pop,fixed_siz
   list(alphas = alpha.all,betas = beta.all)
 }
 
+#------------------------------------------------------------------------------#
+# Function to generate matrix of alphas and betas for populations of unequal size
+#------------------------------------------------------------------------------#	
+# pops <- # of populations (MUST BE 10)
+# max.a <- maximum productivity
+# min.a <- minimum productivity
+# steps <- # of steps between high and low heterogeneity
+# equ_spw <- equilibrium abundance (assumes all pops are the same size)
+# var_pop <- maintain evenness in variation in productivity across populations? ("Yes" or "No")
+# fixed_size <- Should total size remain the same regardless of richness? ("Yes" or "No") if yes then it is equal to equ_spw
+# evenness <- matrix of stock proportions (columns) by level of evenness (rows)
+hetero_prod_func_even = function(pops, max.a, min.a, steps, equ_spw, var_pop, fixed_size, evenness){
+  even <- matrix(NA,10,10)
+  even[1,]<-c(0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.991)
+  even[2,]<-c(0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.01,0.02,0.963)
+  even[3,]<-c(0.001,0.001,0.001,0.001,0.001,0.001,0.014,0.03,0.03,0.92)
+  even[4,]<-c(0.001,0.001,0.001,0.001,0.001,0.001,0.02,0.03,0.1,0.844)
+  even[5,]<-c(0.001,0.001,0.001,0.015,0.02,0.02,0.03,0.05,0.05,0.812)
+  even[6,]<-c(0.001,0.004,0.01,0.015,0.02,0.02,0.03,0.05,0.15,0.7)
+  even[7,]<-c(0.001,0.01,0.015,0.02,0.03,0.04,0.05,0.15,0.2,0.484)
+  even[8,]<-c(0.001,0.01,0.015,0.02,0.03,0.04,0.15,0.2,0.25,0.284)
+  even[9,]<-c(0.01,0.01,0.01,0.05,0.1,0.1,0.12,0.2,0.2,0.2)
+  even[10,]<-c(0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1)
+  
+  if(fixed_size == "Yes"){equ_spw = equ_spw/pops}
+  if(fixed_size == "No"){equ_spw = equ_spw*even[,]}
+  
+  alpha.all <- array(NA,dim=c(steps,pops))
+  alpha.all[1,] <- rep(mean(c(max.a, min.a),pops))
+  alpha.all[steps,1] <- min.a
+  alpha.all[steps, pops] <- max.a
+  
+  for(i in 2:pops){
+    alpha.all[steps,i] <- alpha.all[steps,i-1] + (max.a-min.a)/(pops-2)
+    for(ii in 2:(steps)){
+      alpha.all[ii,i-1] <- alpha.all[ii-1,i-1] - (alpha.all[1,i-1] - alpha.all[steps,i-1])/(steps-2)
+      alpha.all[ii, pops] <- alpha.all[ii-1, pops] - (alpha.all[1, pops] - alpha.all[steps, pops])/(steps-2)
+    }
+  }
+  
+  if(var_pop == "Yes"){
+    alpha.all[,1:(pops/3)] <- alpha.all[,1]
+    alpha.all[,((pops/3)+1):((pops/3)+pops/3)] <- alpha.all[,(pops/2)+0.5]
+    alpha.all[,((pops)-(pops/3)+1):pops]  <- alpha.all[,pops]
+  }	
+  
+  if(fixed_size == "No"){
+    for(j in 1:(steps)){
+      alpha.all[j,] <- alpha.all[8,]
+    }
+  }	
+  
+  beta.all <- array(NA,dim=c(steps,pops))
+  beta.all <- log(alpha.all)/equ_spw
+  list(alphas = alpha.all,betas = beta.all)
+}
 
 #------------------------------------------------------------------------------#
 # Filled contour function by Ian Taylor, Carey McGilliard and Bridget Ferris
@@ -278,7 +330,9 @@ filled.legend <-
     box()
 }
 
-
+#------------------------------------------------------------------------------#
+# Multi-panel risk vs. stability plot
+#------------------------------------------------------------------------------#
 risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.tolerance, indexx, row){
   
   if(row == 1){ylim = 25}
@@ -367,6 +421,9 @@ risk_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.
   }
 }
 
+#------------------------------------------------------------------------------#
+# Multi-panel yield vs. stability plot
+#------------------------------------------------------------------------------#
 yield_stab_plot <- function(long_sims, incl.legend, yaxis_plot, xaxis_plot, risk.tolerance, indexx, row){
   
   if(row == 1){ylim = 100}

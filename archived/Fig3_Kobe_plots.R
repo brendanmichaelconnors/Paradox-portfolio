@@ -130,6 +130,6 @@ p8 <- ggplot() +
   geom_vline(xintercept=1)+ 
   scale_y_reverse()
 
-jpeg("figures/fig_3_kobe_100sims_phi_0.8.Rho_0.6.logFE_05.OU_0.12July2019.jpeg",width=6, height=6, units="in",res=800)
+jpeg("figures/fig_3_1Mar011.jpeg",width=6, height=6, units="in",res=800)
   ggarrange(p1,p2,p3,p4,p5,p6,p7,p8, labels = c("A", "B", "C", "D", "E", "F", "G", "H"))
 dev.off()
