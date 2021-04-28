@@ -1,6 +1,6 @@
 ######################################################################
 # functions.R
-# Functions for mixed-stock fishery simulations  
+# 	Functions for mixed-stock fishery simulations  
 #
 ######################################################################
 
@@ -67,9 +67,7 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 		N[i,2,]=R[i-(5),]*Preturn[2]
 		N[i,3,]=R[i-(6),]*Preturn[3]
 		N[i,4,]=R[i-(7),]*Preturn[4]
-		#N[N[,,]=='NaN'] <- 0
 		Ntot[i,]=colSums(N[i,,])
-		#Ntot[i,]=Ntot[i,]*rlnorm(1,0,for.error)
 	
 			for (yy in 1:length(alpha)){
 			u <- master.har[which.min(abs(master.har[,1,yy]-(Ntot[i,yy]))),2,yy]*control + 
@@ -82,7 +80,7 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 		S_exp = Ntot[i,]-H[i,] ; S_exp[S_exp<0] = 0
 		S[i,] = S_exp
 				
-		S[i,S[i,]<10] = 0 # drive pops below a threshold to extinction
+		S[i,S[i,]<20] = 0 # drive pops below a threshold of 20 fish to extinction
 		R[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,]+phi*v[i-1,]+epi[i,])
 		predR[i,] = alpha[]*S[i,]*exp(-beta[]*S[i,])
 		v[i,] = log(R[i,])-log(predR[i,])
@@ -92,7 +90,7 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 	#Output
 	S[S[,]=='NaN'] <- 0
 	Ntot[Ntot[,]=='NaN'] <- 0
-	pms <- matrix(NA,1,7) # performance measures: escapement, harvest, harvest rate, overfished, extinct, prop years failed to meet subsistence goal, CV in harvest
+	pms <- matrix(NA,1,7) 
 	over<- matrix(NA,length(alpha))
 	ext<- matrix(NA,length(alpha))
 	harvest_rate <- (H[20:ny,]/Ntot[20:ny,])[,1]
@@ -103,13 +101,13 @@ process = function(ny,Ro,rho,phi,Preturn,episd,alpha,beta,control,MSY.add,for.er
 		}
 	harvest <-rowSums(H[,])
 
-	pms[,1] <- sum(S[20:ny,])/(ny-19)
-	pms[,2] <- mean(harvest[(ny-20):ny]) 
-	pms[,3] <- mean(harvest_rate)
-	pms[,4] <- sum(over)/length(alpha)
-	pms[,5] <- sum(ext)/length(alpha)
-	pms[,6] <- sd(harvest[(ny-20):ny])/mean(harvest[(ny-20):ny]) 
-	pms[,7] <- sd(harvest[(ny-20):ny])/mean(harvest[(ny-20):ny]) 
+	pms[,1] <- sum(S[20:ny,])/(ny-19) # escapement
+	pms[,2] <- mean(harvest[(ny-20):ny]) # harvest 
+	pms[,3] <- mean(harvest_rate) # harvest rate
+	pms[,4] <- sum(over)/length(alpha) # overfished
+	pms[,5] <- sum(ext)/length(alpha) #extirpated
+	pms[,6] <- sd(harvest[(ny-20):ny])/mean(harvest[(ny-20):ny]) # CV in harvest
+	pms[,7] <- sd(harvest[(ny-20):ny])/mean(harvest[(ny-20):ny]) # CV in harvest
 	
 	list(S=S[20:ny,],N=Ntot[20:ny,],H=H[20:ny,],PMs=pms)
 	}
@@ -163,6 +161,7 @@ hetero_prod_func = function(pops, max.a, min.a, steps, equ_spw,var_pop,fixed_siz
 # var_pop <- maintain evenness in variation in productivity across populations? ("Yes" or "No")
 # fixed_size <- Should total size remain the same regardless of richness? ("Yes" or "No") if yes then it is equal to equ_spw
 # evenness <- matrix of stock proportions (columns) by level of evenness (rows)
+
 hetero_prod_func_even = function(pops, max.a, min.a, steps, equ_spw, var_pop, fixed_size, evenness){
   even <- matrix(NA,10,10)
   even[1,]<-c(0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.991)

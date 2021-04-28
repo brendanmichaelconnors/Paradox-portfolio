@@ -262,7 +262,7 @@ layout.mat <- matrix(c(1,1,2,2,3,
                        9,9,10,10,12), nrow=6, byrow=TRUE)
 
 
-pdf(paste("AllSystems_12panel_", yr.range, "yrs.pdf", sep=""),
+pdf(paste("AllSystems_12panel_", yr.range, "yrs2.pdf", sep=""),
     width=9, height=8.5)
 grid.arrange(p1,p2,p4,p3,p9,p10,p12,p11,p5,p6,p8,p7,
              layout_matrix=layout.mat)
