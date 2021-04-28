@@ -1,5 +1,5 @@
 Data and code to reproduce analyses and figures in:
->Conservation risks and portfolio effects in mixed-stock fisheries. In preparation. Moore J.W, B. Connors, and E. Hodgson. 
+>Moore J.W, B. M. Connors, and E. E. Hodgson. 2021. Conservation risks and portfolio effects in mixed-stock fisheries. Fish and Fisheries. DOI: 10.1111/faf.12567
 
 This project has two main components:
 1. A simulation model for an age-structured, multi-stock fish population complex that is used to explore how different aspects of diversity (e.g., number and evenness of populations, asynchrony among populations, differences in productivity among populations) and fishery management control (e.g., the ability of the managers to control and allocate harvest) influence fishery outcomes.
