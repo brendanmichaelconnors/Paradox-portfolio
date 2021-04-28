@@ -13,9 +13,7 @@ This project has two main components:
 - `case_studies`: Folder with all code to run and visualize Bayesian spawner-recruitment analysis of case study systems to characterize population status over time. Figure 5 is partially generated with code in this folder but the final version with a map inset was generated outside of this repository.
 - `functions.R`: All required functions; sourced by `load.R`. The one exception is the harvest control rule function  (`MSY_hcr_function.R`) which needs to be called multiple times during simulations.
 
-
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4724357.svg)](https://doi.org/10.5281/zenodo.4724357)
-
 
 
 
