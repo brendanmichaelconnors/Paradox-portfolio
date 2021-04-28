@@ -14,6 +14,7 @@ This project has two main components:
 - `functions.R`: All required functions; sourced by `load.R`. The one exception is the harvest control rule function  (`MSY_hcr_function.R`) which needs to be called multiple times during simulations.
 
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4724357.svg)](https://doi.org/10.5281/zenodo.4724357)
 
 
 
