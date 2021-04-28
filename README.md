@@ -8,9 +8,9 @@ This project has two main components:
 ## Files
 - `load.R`: Loads packages and functions necessary for analysis. This file should be sourced prior to running other scripts.
 - `simulations.R`: Runs all mixed-stock fishery simulations and saves output as RDS files in the `output` sub-folder.
-- `kobe_simulations.R`: Runs illustrative mixed-stock fishery simulations across 2 combinations of management control and over-fishing risk tolerance for Kobe plots. This is sourced when Figure 3 is generated in `figures.R`.
-- `figures.R`: Generates all figures based on the mixed-stock fishery simulations and saves them in the `figures` sub-folder.
-- `case_studies`: Folder with all code to run and visualize Bayesian spawner-recruitment analysis of case study systems to characterize population status over time.
+- `kobe_simulations.R`: Runs illustrative mixed-stock fishery simulations across 2 combinations of management control and over-fishing risk tolerance for Kobe plots. This is sourced when Figure 3 is generated in `figures.R`. 
+- `figures.R`: Generates all figures based on the mixed-stock fishery simulations and saves them in the `figures` sub-folder. 
+- `case_studies`: Folder with all code to run and visualize Bayesian spawner-recruitment analysis of case study systems to characterize population status over time. Figure 5 is partially generated with code in this folder but the final version with a map inset was generated outside of this repository.
 - `functions.R`: All required functions; sourced by `load.R`. The one exception is the harvest control rule function  (`MSY_hcr_function.R`) which needs to be called multiple times during simulations.
 
 
